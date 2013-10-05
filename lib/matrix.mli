@@ -3,6 +3,8 @@ sig
   type t = NW | N | NE
          | W  |     E
          | SW | S | SE
+
+  val all : t list
 end
 
 module Point :
