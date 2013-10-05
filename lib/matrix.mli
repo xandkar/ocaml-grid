@@ -1,3 +1,10 @@
+module Direction :
+sig
+  type t = NW | N | NE
+         | W  |     E
+         | SW | S | SE
+end
+
 module Point :
 sig
   type t = {r : int; k : int}
@@ -8,6 +15,8 @@ type 'a t
 val make : rs:int -> ks:int -> 'a -> 'a t
 
 val get_neighbors : 'a t -> Point.t -> 'a list
+
+val view : 'a t -> point:Point.t -> dir:Direction.t -> depth:int -> 'a list
 
 val map : 'a t -> f:('a -> 'b) -> 'b t
 

@@ -9,6 +9,9 @@ struct
     { r = p.r + p'.r
     ; k = p.k + p'.k
     }
+
+  let of_tuple (r, k) =
+    {r; k}
 end
 
 module Direction =
@@ -22,6 +25,16 @@ struct
             ; SW ; S ; SE
             ]
 
+  let rec seq ~start ~goal ~step =
+    if start = goal then [] else start :: seq ~start:(start + step) ~goal ~step
+
+  let rec rep x ~times =
+    if times = 0 then [] else x :: rep x ~times:(times - 1)
+
+  let vector_fwd  depth = seq ~start:0 ~goal:  depth  ~step:  1
+  let vector_rev  depth = seq ~start:0 ~goal:(-depth) ~step:(-1)
+  let vector_flat depth = rep 0 ~times:depth
+
   let to_offset =
     let open Point in
     function
@@ -33,6 +46,20 @@ struct
     | SW -> {r =  1; k = -1}
     | S  -> {r =  1; k =  0}
     | SE -> {r =  1; k =  1}
+
+  let to_offsets t ~depth =
+    let offsets =
+      match t with
+      | N  -> L.combine (vector_flat depth) (vector_rev  depth)
+      | NE -> L.combine (vector_fwd  depth) (vector_rev  depth)
+      | E  -> L.combine (vector_fwd  depth) (vector_flat depth)
+      | SE -> L.combine (vector_fwd  depth) (vector_fwd  depth)
+      | S  -> L.combine (vector_flat depth) (vector_fwd  depth)
+      | SW -> L.combine (vector_rev  depth) (vector_fwd  depth)
+      | W  -> L.combine (vector_rev  depth) (vector_flat depth)
+      | NW -> L.combine (vector_rev  depth) (vector_rev  depth)
+    in
+    L.map Point.of_tuple offsets
 end
 
 
@@ -74,3 +101,9 @@ let neighborhood t point =
 
 let get_neighbors t point =
   List.map (get t) (neighborhood t point)
+
+let view t ~point ~dir ~depth =
+     Direction.to_offsets dir ~depth
+  |> L.map (Point.(+) point)
+  |> L.filter (is_within_bounds t)
+  |> L.map (get t)
