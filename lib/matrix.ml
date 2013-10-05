@@ -104,6 +104,6 @@ let get_neighbors t point =
 
 let view t ~point ~dir ~depth =
      Direction.to_offsets dir ~depth
-  |> L.map (Point.(+) point)
+  |> L.map    (Point.(+) point)
   |> L.filter (is_within_bounds t)
-  |> L.map (get t)
+  |> L.map    (get t)
