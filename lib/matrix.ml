@@ -14,7 +14,18 @@ struct
     {r; k}
 end
 
-module Direction =
+module Direction :
+sig
+  type t = NW | N | NE
+         | W  |     E
+         | SW | S | SE
+
+  val all : t list
+
+  val to_offset : t -> Point.t
+
+  val to_offsets : t -> depth:int -> Point.t list
+end =
 struct
   type t = NW | N | NE
          | W  |     E
