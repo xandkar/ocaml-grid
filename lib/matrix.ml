@@ -98,9 +98,7 @@ let get t {Point.r; Point.k} =
   t.(r).(k)
 
 let is_within_bounds t {Point.r; Point.k} =
-  match t with
-  | [||] -> assert false
-  | t ->
+    A.length t > 0 &&
     r >= 0 && r < A.length t &&
     k >= 0 && k < A.length t.(0)
 
