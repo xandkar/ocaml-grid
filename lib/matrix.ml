@@ -96,7 +96,7 @@ let is_within_bounds t {Point.r; Point.k} =
 let neighborhood t point =
      Direction.all
   |> L.map    Direction.to_offset
-  |> L.map    (fun offset_point -> Point.(point + offset_point))
+  |> L.map    (Point.(+) point)
   |> L.filter (is_within_bounds t)
 
 let get_neighbors t point =
