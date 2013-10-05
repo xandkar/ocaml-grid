@@ -98,9 +98,9 @@ let get t {Point.r; Point.k} =
   t.(r).(k)
 
 let is_within_bounds t {Point.r; Point.k} =
-    A.length t > 0 &&
-    r >= 0 && r < A.length t &&
-    k >= 0 && k < A.length t.(0)
+  A.length t > 0 &&
+  r >= 0 && r < A.length t &&
+  k >= 0 && k < A.length t.(0)
 
 let neighborhood t point =
      Direction.all
